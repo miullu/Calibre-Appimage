@@ -78,7 +78,7 @@ jobs:
 
           pwd
           
-          cd ../../../
+          cd /home/runner/work/Calibre-Appimage/Calibre-Appimage
 
           pwd
           
