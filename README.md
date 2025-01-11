@@ -10,6 +10,8 @@ you can use --lsexec to show what binary included and --exec to specifically use
 2) ```cd Calibre-Appimage & sh appimagecreate.sh $path_of_appimage_place```
 3) Done!
 
+Well actually sometime you can just download it from release, but it isnt the newest and the entry may need to create by yourself (download *.desktop and edit path by yourself)
+
 # issue i have met
 libxkbfile is important
 qt isnt required but libxkbfile is
