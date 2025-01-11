@@ -36,7 +36,7 @@ jobs:
           echo "Calibre version: $version" 
 
           mkdir calibre.AppDir
-          cd calibre.AppDir/
+
           mkdir -p calibre.AppDir/usr/bin
           
           cat > calibre.AppDir/calibre.desktop << 'EOF'
