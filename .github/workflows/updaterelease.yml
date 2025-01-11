@@ -75,8 +75,12 @@ jobs:
 
           cd calibre.AppDir/usr/bin/
           curl -o - https://download.calibre-ebook.com/$version/calibre-$version-x86_64.txz | tar -xJf -
+
+          pwd
           
-          cd 
+          cd ../../../../ 
+
+          pwd
           
           cp calibre.AppDir/usr/bin/content-server/calibre.png calibre.AppDir
 
