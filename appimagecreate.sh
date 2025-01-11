@@ -55,11 +55,7 @@ mv Calibre-x86_64.AppImage Calibre-$version-x86_64.AppImage
 
 rm -r appimagetool-x86_64.AppImage calibre.AppDir
 
-
-cat > calibre.AppDir/calibre.desktop << 'EOF'
-
-EOF
-
+mv Calibre-*.AppImage $1/
 echo Add desktop shortcut?
 sed -i "s@Calibre-$version-x86_64.AppImage@$1/Calibre-$version-x86_64.AppImage@g" *.desktop
 yes | cp *.desktop $HOME/.local/share/applications
