@@ -69,7 +69,8 @@ jobs:
           chmod +x calibre.AppDir/calibre.desktop
 
           wget https://gist.githubusercontent.com/iTrooz/f287a48b95d672c3c97fea4f12a40891/raw/0812d4bccdde9dcccd8c86e0f1298c553efaafd8/AppRun
-
+          mv AppRun calibre.AppDir
+          
           chmod +x calibre.AppDir/AppRun
 
           cd calibre.AppDir/usr/bin/
