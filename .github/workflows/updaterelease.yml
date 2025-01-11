@@ -1,0 +1,98 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI for creating appimage
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Install dependency
+        run: sudo apt-get install -y fuse libfuse2
+
+      # Runs a set of commands using the runners shell
+      - name: Prepare
+        run: |
+          version=$(curl -s https://calibre-ebook.com/download_linux | grep -o -E 'The latest release of calibre is [0-9]+\.[0-9]+\.[0-9]+' | grep -o -E "[0-9]+\.[0-9]+\.[0-9]+")
+          echo "Calibre version: $version" 
+
+          mkdir calibre.AppDir
+          cd calibre.AppDir/
+          mkdir -p calibre.AppDir/usr/bin
+          
+          cat > calibre.AppDir/calibre.desktop << 'EOF'
+          [Desktop Entry]
+          Type=Application
+          Name=Calibre
+          GenericName=E-book library management
+          Comment=E-book library management: Convert, view, share, catalogue all your e-books
+          Exec=calibre %F
+          Icon=calibre
+          MimeType=application/x-mobipocket-ebook;application/epub+zip;x-content/ebook-reader
+          Categories=Office;Graphics;Viewer;
+          X-GNOME-UsesNotifications=true
+          Actions=Ebook-editor;Ebook-viewer;LRF-viewer;
+          
+          [Desktop Action Ebook-editor]
+          Name=Ebook editor
+          Exec=ebook-edit %f
+          
+          [Desktop Action Ebook-viewer]
+          Name=Ebook viewer
+          Exec=ebook-viewer %f
+          
+          [Desktop Action LRF-viewer]
+          Name=LRF viewer
+          Exec=lrfviewer %f
+
+          EOF
+
+          chmod +x calibre.AppDir/calibre.desktop
+
+          wget https://gist.githubusercontent.com/iTrooz/f287a48b95d672c3c97fea4f12a40891/raw/0812d4bccdde9dcccd8c86e0f1298c553efaafd8/AppRun
+
+          chmod +x calibre.AppDir/AppRun
+
+          cd calibre.AppDir/usr/bin/
+          curl -o - https://download.calibre-ebook.com/$version/calibre-$version-x86_64.txz | tar -xJf -
+          
+          cd 
+          
+          cp calibre.AppDir/usr/bin/content-server/calibre.png calibre.AppDir
+      - name: Make Appimage
+      - run: |
+          wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+          ./appimagetool-x86_64.AppImage calibre.AppDir
+          mv Calibre-x86_64.AppImage Calibre-$version-x86_64.AppImage
+          md5sum "Calibre-$version-x86_64.AppImage" > "Calibre-$version-x86_64.AppImage.md5"
+          ls -lah
+      
+      - uses: xresloader/upload-to-github-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "Calibre*.AppImage; Calibre*.md5"
+          release_id: ${{ steps.create_release.outputs.id }}
+          verbose: true
+          draft: yes
+          default_release_name: "Calibre v in AppImage"
