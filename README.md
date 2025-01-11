@@ -9,3 +9,9 @@ you can use --lsexec to show what binary included and --exec to specifically use
 1) using ```git clone https://github.com/miullu/Calibre-Appimage```
 2) ```cd Calibre-Appimage & sh appimagecreate.sh $path_of_appimage_place```
 3) Done!
+
+# issue i have met
+libxkbfile is important
+qt isnt required but libxkbfile is
+
+ps: the original qt is supper huge!
