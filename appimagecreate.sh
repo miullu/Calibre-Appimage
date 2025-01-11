@@ -53,9 +53,20 @@ chmod +x appimagetool-x86_64.AppImage
 
 mv Calibre-x86_64.AppImage Calibre-$version-x86_64.AppImage
 
-rm -r appimagetool-x86_64.AppImage calibre.AppDir
-
 mv Calibre-*.AppImage $1/
 echo Add desktop shortcut?
 sed -i "s@Calibre-$version-x86_64.AppImage@$1/Calibre-$version-x86_64.AppImage@g" *.desktop
+
 yes | cp *.desktop $HOME/.local/share/applications
+read -p "Do you want to continue? (yes/no) " answer
+
+if [ "$answer" == "yes" ]; then
+  cp *.desktop $HOME/.local/share/applications
+  echo Done! You can use "rm -rf $(pwd)" to remove those unneeded now
+elif [ "$answer" == "no" ]; then
+  echo Done! Tou can use "rm -rf $(pwd)" to remove those unneeded now
+  exit 0
+else
+  echo "Invalid response. Please enter 'yes' or 'no'."
+  exit 1
+fi
