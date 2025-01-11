@@ -55,7 +55,7 @@ mv Calibre-x86_64.AppImage Calibre-$version-x86_64.AppImage
 
 mv Calibre-*.AppImage $1/
 echo Add desktop shortcut?
-sed -i "s@Calibre-$version-x86_64.AppImage@$1/Calibre-$version-x86_64.AppImage@g" *.desktop
+sed -i "s@Calibre-x86_64.AppImage@$1/Calibre-$version-x86_64.AppImage@g" *.desktop
 
 yes | cp *.desktop $HOME/.local/share/applications
 read -p "Do you want to continue? (yes/no) " answer
